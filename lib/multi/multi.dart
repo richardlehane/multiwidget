@@ -1,7 +1,17 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:xml/xml.dart';
 
 class Multi extends StatefulWidget {
-  const Multi({super.key});
+  final List<XmlElement>? elements;
+  const Multi({super.key, this.elements});
+
+  Widget makeItem(XmlElement el) {
+    return TextBox(controller: TextEditingController(text: el.innerText));
+  }
+
+  Widget makeView(XmlElement el) {
+    return Text(el.innerText);
+  }
 
   @override
   State<Multi> createState() => _MultiState();
