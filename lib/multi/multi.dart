@@ -5,11 +5,11 @@ class Multi extends StatefulWidget {
   final List<XmlElement>? elements;
   const Multi({super.key, this.elements});
 
-  Widget makeItem(XmlElement el) {
+  Widget makeItem(XmlElement? el) {
     return TextBox(controller: TextEditingController(text: el.innerText));
   }
 
-  Widget makeView(XmlElement el) {
+  Widget makeView(XmlElement? el) {
     return Text(el.innerText);
   }
 
@@ -34,8 +34,23 @@ class _MultiState extends State<Multi> {
             ),
             onPressed: () => debugPrint('pressed button'),
           ),
+          AnimatedSwitcher(
+          duration: const Duration(seconds: 1),
+          transitionBuilder: (Widget child, Animation<double> animation) {
+            return SlideTransition(
+              position: Tween(
+                begin: Offset(1.0, 1.0),
+                end: Offset(0.0, 0.0),
+              ).animate(animation),
+              child: child,
+            );
+          },
+          child: makeItem(),
+      ),
         ],
       ),
     );
   }
 }
+
+// see reference terms: use a horizontal list
