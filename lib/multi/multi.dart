@@ -34,7 +34,7 @@ class _MultiState extends State<Multi> {
             ),
             onPressed: () => debugPrint('pressed button'),
           ),
-          AnimatedSwitcher(
+          AnimatedSwitcher( // https://api.flutter.dev/flutter/widgets/AnimatedSwitcher-class.html
           duration: const Duration(seconds: 1),
           transitionBuilder: (Widget child, Animation<double> animation) {
             return SlideTransition(
