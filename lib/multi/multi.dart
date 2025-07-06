@@ -2,6 +2,10 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:xml/xml.dart';
 import 'entry.dart';
 
+// Two types:
+// An enclosing tag e.g. Status
+// Multiple of the same element as siblings, e.g. comments, source, disposal
+
 class Multi extends StatefulWidget {
   final List<XmlElement>? elements;
   const Multi({super.key, this.elements});
