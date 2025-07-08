@@ -20,17 +20,29 @@ class Multi {
   }
 
   List<xml> getParagraphs(String name, int idx, String el) {
-
+    return null;
   }
 
   void setParagraphs(String name, int idx, String el, List<xml> val) {
     return;
   }
 
+  // for TermTitleRef or other repeating fields
+  int fieldLen(String name, int idx, String tok) {
+    return 0;
+  }
+
+  String getField(String name, int idx, String tok, int fidx) {
+    return "";
+  }
+
+  void setField(String name, int idx, String tok, int fidx, String val) {
+
+  }
+
   void moveUp(String name, int idx) {}
   void moveDown(String name, int idx) {}
   void drop(String name, int idx) {}
-  
 }
 
 
