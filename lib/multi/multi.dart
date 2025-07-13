@@ -1,32 +1,25 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:xml/xml.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'entry.dart';
+import 'provider/multi_provider.dart';
 
 // Two types:
 // An enclosing tag e.g. Status
 // Multiple of the same element as siblings, e.g. comments, source, disposal
 
-class Multi extends StatefulWidget {
-  final List<XmlElement>? elements;
-  const Multi({super.key, this.elements});
+class Multi extends ConsumerWidget {
+  final String name;
+  Multi({super.key, required this.name});
 
   @override
-  State<Multi> createState() => _MultiState();
-}
-
-class _MultiState extends State<Multi> {
-  var itemCount = 0;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return InfoLabel(
-      label: "Multi",
-      child: ListView(
-        children: [
-          MultiEntry(
-            element: XmlElement.tag("hello", children: [XmlText("hey")]),
-          ),
-        ],
+      label: name,
+      child: ListView.builder(
+        itemCount: ref.watch(multiProvider).len("Disposal"),
+        itemBuilder: (BuildContext context, int index) {
+          return MultiEntry(idx: index);
+        },
       ),
     );
   }

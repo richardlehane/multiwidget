@@ -1,12 +1,15 @@
-// All on current node
+import 'package:xml/xml.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-class Multi {
+part 'multi_provider.g.dart';
+
+class MultiImpl {
   int len(String name) {
     return 0;
   }
 
   // e.g. append("Disposal", "Disposal")
-  int append(String name, String el) { 
+  int append(String name, String el) {
     return 0;
   }
 
@@ -19,11 +22,11 @@ class Multi {
     return;
   }
 
-  List<xml> getParagraphs(String name, int idx, String el) {
+  List<XmlElement>? getParagraphs(String name, int idx, String el) {
     return null;
   }
 
-  void setParagraphs(String name, int idx, String el, List<xml> val) {
+  void setParagraphs(String name, int idx, String el, List<XmlElement>? val) {
     return;
   }
 
@@ -36,13 +39,17 @@ class Multi {
     return "";
   }
 
-  void setField(String name, int idx, String tok, int fidx, String val) {
-
-  }
+  void setField(String name, int idx, String tok, int fidx, String val) {}
 
   void moveUp(String name, int idx) {}
   void moveDown(String name, int idx) {}
   void drop(String name, int idx) {}
 }
 
-
+@riverpod
+class Multi extends _$Multi {
+  @override
+  MultiImpl build() {
+    return MultiImpl();
+  }
+}

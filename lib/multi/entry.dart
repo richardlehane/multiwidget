@@ -1,9 +1,9 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:xml/xml.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MultiEntry extends StatefulWidget {
-  final XmlElement? element;
-  const MultiEntry({super.key, this.element}); //, this.elements});
+  final int idx;
+  const MultiEntry({super.key, required this.idx}); //, this.elements});
 
   Widget makeEmpty(BuildContext context) {
     return IconButton(
@@ -16,18 +16,18 @@ class MultiEntry extends StatefulWidget {
     );
   }
 
-  Widget makeItem(BuildContext context, XmlElement? el) {
-    if (el == null) return makeEmpty(context);
+  Widget makeItem(BuildContext context) {
+    if (idx < 0) return makeEmpty(context);
     return SizedBox(
       height: 40.0,
       width: 100.0,
-      child: TextBox(controller: TextEditingController(text: el.innerText)),
+      child: TextBox(controller: TextEditingController(text: "hello")),
     );
   }
 
-  Widget makeView(BuildContext context, XmlElement? el) {
-    if (el == null) return makeEmpty(context);
-    return SizedBox(height: 40.0, width: 100.0, child: Text(el.innerText));
+  Widget makeView(BuildContext context) {
+    if (idx < 0) return makeEmpty(context);
+    return SizedBox(height: 40.0, width: 100.0, child: Text("hello"));
   }
 
   @override
@@ -56,8 +56,8 @@ class _MultiEntryState extends State<MultiEntry> {
             padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
             child: AnimatedCrossFade(
               duration: const Duration(milliseconds: 200),
-              firstChild: widget.makeItem(context, widget.element),
-              secondChild: widget.makeView(context, widget.element),
+              firstChild: widget.makeItem(context),
+              secondChild: widget.makeView(context),
               crossFadeState:
                   checked
                       ? CrossFadeState.showFirst

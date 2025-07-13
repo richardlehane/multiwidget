@@ -1,8 +1,9 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'multi/multi.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -29,7 +30,7 @@ class Contents extends StatelessWidget {
       color: FluentTheme.of(context).micaBackgroundColor,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Center(child: Multi()),
+        child: Center(child: Multi(name: "Disposal")),
       ),
     );
   }
