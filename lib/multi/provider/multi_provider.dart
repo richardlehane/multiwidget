@@ -1,55 +1,98 @@
-import 'package:xml/xml.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:authority/authority.dart'
+    as authority
+    show Document, View, NodeType, CurrentNode;
 
 part 'multi_provider.g.dart';
 
-class MultiImpl {
-  int len(String name) {
-    return 0;
+class DocState {
+  int current;
+  List<authority.Document> documents;
+
+  DocState({required this.current, required this.documents});
+}
+
+@Riverpod(keepAlive: true)
+class Documents extends _$Documents {
+  @override
+  DocState build() {
+    return DocState(current: 0, documents: [authority.Document.empty()]);
   }
 
-  // e.g. append("Disposal", "Disposal")
-  int append(String name, String el) {
-    return 0;
+  void load(PlatformFile f) {
+    state.documents.add(authority.Document.load(f));
+    state.current = state.documents.length - 1;
+    ref.notifyListeners();
   }
 
-  // knows if el or attr
-  String get(String name, int idx, String tok) {
-    return "";
+  void newDocument() {
+    state.documents.add(authority.Document.empty());
+    state.current = state.documents.length - 1;
+    ref.notifyListeners();
   }
 
-  void set(String name, int idx, String tok, String val) {
-    return;
+  void drop(int index) {
+    if (state.documents.length > 1) {
+      if (state.current == state.documents.length - 1) {
+        state.current -= 1;
+      }
+      state.documents.removeAt(index);
+      ref.notifyListeners();
+    }
   }
 
-  List<XmlElement>? getParagraphs(String name, int idx, String el) {
-    return null;
+  void paneChanged(int pane) {
+    state.current = pane;
+    ref.notifyListeners();
   }
 
-  void setParagraphs(String name, int idx, String el, List<XmlElement>? val) {
-    return;
+  void selectionChanged(int index) {
+    state.documents[state.current].setCurrent(index);
+    ref.notifyListeners();
   }
 
-  // for TermTitleRef or other repeating fields
-  int fieldLen(String name, int idx, String tok) {
-    return 0;
+  void viewChanged(String view) {
+    switch (view) {
+      case "source":
+        state.documents[state.current].view = authority.View.source;
+      default:
+        state.documents[state.current].view = authority.View.edit;
+    }
+    ref.notifyListeners();
   }
 
-  String getField(String name, int idx, String tok, int fidx) {
-    return "";
+  void addChild(int n, authority.NodeType nt) {
+    state.documents[state.current].addChild(n, nt);
+    ref.notifyListeners();
   }
 
-  void setField(String name, int idx, String tok, int fidx, String val) {}
+  void addSibling(int n, authority.NodeType nt) {
+    state.documents[state.current].addSibling(n, nt);
+    ref.notifyListeners();
+  }
 
-  void moveUp(String name, int idx) {}
-  void moveDown(String name, int idx) {}
-  void drop(String name, int idx) {}
+  void dropElement(int n) {
+    state.documents[state.current].drop(n);
+    ref.notifyListeners();
+  }
+
+  void refresh() {
+    state.documents[state.current].refreshTree();
+    ref.notifyListeners();
+  }
 }
 
 @riverpod
-class Multi extends _$Multi {
+class Node extends _$Node {
   @override
-  MultiImpl build() {
-    return MultiImpl();
+  authority.CurrentNode build() {
+    final documents = ref.watch(documentsProvider);
+    return documents.documents[documents.current].current();
+  }
+
+  void multiAdd(String element, String tok) {
+    state.mAdd(element, tok);
+    ref.notifyListeners();
   }
 }

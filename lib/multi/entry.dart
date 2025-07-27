@@ -1,40 +1,21 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MultiEntry extends StatefulWidget {
-  final int idx;
-  const MultiEntry({super.key, required this.idx}); //, this.elements});
+class MultiEntry extends ConsumerStatefulWidget {
+  final Widget Function(BuildContext context, WidgetRef ref) formFn;
+  final Widget Function(BuildContext context, WidgetRef ref) viewFn;
 
-  Widget makeEmpty(BuildContext context) {
-    return IconButton(
-      icon: Icon(
-        FluentIcons.add,
-        size: 24.0,
-        color: FluentTheme.of(context).accentColor,
-      ),
-      onPressed: () => debugPrint('pressed button'),
-    );
-  }
-
-  Widget makeItem(BuildContext context) {
-    if (idx < 0) return makeEmpty(context);
-    return SizedBox(
-      height: 40.0,
-      width: 100.0,
-      child: TextBox(controller: TextEditingController(text: "hello")),
-    );
-  }
-
-  Widget makeView(BuildContext context) {
-    if (idx < 0) return makeEmpty(context);
-    return SizedBox(height: 40.0, width: 100.0, child: Text("hello"));
-  }
+  const MultiEntry({
+    super.key,
+    required this.formFn,
+    required this.viewFn,
+  }); //, this.elements});
 
   @override
-  State<MultiEntry> createState() => _MultiEntryState();
+  ConsumerState<MultiEntry> createState() => _MultiEntryState();
 }
 
-class _MultiEntryState extends State<MultiEntry> {
+class _MultiEntryState extends ConsumerState<MultiEntry> {
   bool checked = false;
 
   @override
@@ -47,7 +28,6 @@ class _MultiEntryState extends State<MultiEntry> {
           child: ToggleSwitch(
             checked: checked,
             onChanged: (v) => setState(() => checked = v),
-            content: Text(checked ? 'Edit' : 'View'),
           ),
         ),
         Expanded(
@@ -56,8 +36,8 @@ class _MultiEntryState extends State<MultiEntry> {
             padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
             child: AnimatedCrossFade(
               duration: const Duration(milliseconds: 200),
-              firstChild: widget.makeItem(context),
-              secondChild: widget.makeView(context),
+              firstChild: widget.formFn(context, ref),
+              secondChild: widget.viewFn(context, ref),
               crossFadeState:
                   checked
                       ? CrossFadeState.showFirst
