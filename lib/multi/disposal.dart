@@ -10,21 +10,29 @@ class Disposal extends Multi {
   Widget Function(BuildContext, WidgetRef) makeForm(int idx) {
     Widget formf(BuildContext context, WidgetRef ref) {
       return SizedBox(
-        height: 40.0,
-        width: 500.0,
+        height: 50.0,
 
+        // width: 500.0,
         child: Row(
           children: [
             Expanded(
-              child: TextBox(
-                controller: TextEditingController(
-                  text: ref
-                      .watch(nodeProvider)
-                      .mGet(element, idx, "RetentionPeriod"),
+              flex: 1,
+              child: InfoLabel(
+                label: "Retention Period",
+                labelStyle: FluentTheme.of(
+                  context,
+                ).typography.caption?.apply(fontSizeFactor: 1.0),
+                child: TextBox(
+                  controller: TextEditingController(
+                    text: ref
+                        .watch(nodeProvider)
+                        .mGet(element, idx, "RetentionPeriod"),
+                  ),
                 ),
               ),
             ),
             Expanded(
+              flex: 2,
               child: TextBox(
                 controller: TextEditingController(
                   text: ref
@@ -34,6 +42,7 @@ class Disposal extends Multi {
               ),
             ),
             Expanded(
+              flex: 2,
               child: TextBox(
                 controller: TextEditingController(
                   text: ref
@@ -54,8 +63,8 @@ class Disposal extends Multi {
   Widget Function(BuildContext, WidgetRef) makeView(int idx) {
     Widget viewf(BuildContext context, WidgetRef ref) {
       return SizedBox(
-        height: 40.0,
-        width: 100.0,
+        height: 50.0,
+
         child: TextBox(
           placeholder: ref
               .watch(nodeProvider)
