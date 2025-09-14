@@ -2,7 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:authority/authority.dart'
     as authority
-    show Document, View, NodeType, CurrentNode;
+    show Document, View, NodeType, CurrentNode, Ref;
 
 part 'multi_provider.g.dart';
 
@@ -17,7 +17,13 @@ class DocState {
 class Documents extends _$Documents {
   @override
   DocState build() {
-    return DocState(current: 0, documents: [authority.Document.empty()]);
+    final em = authority.Document.empty();
+    em.addChild((
+      authority.NodeType.rootType,
+      0,
+    ), authority.NodeType.contextType);
+    em.setCurrent((authority.NodeType.contextType, 0));
+    return DocState(current: 0, documents: [em]);
   }
 
   void load(PlatformFile f) {
@@ -47,8 +53,9 @@ class Documents extends _$Documents {
     ref.notifyListeners();
   }
 
-  void selectionChanged(int index) {
-    state.documents[state.current].setCurrent(index);
+  void selectionChanged(authority.Ref aref) {
+    if (aref.$1 == authority.NodeType.none) return;
+    state.documents[state.current].setCurrent(aref);
     ref.notifyListeners();
   }
 
@@ -62,18 +69,18 @@ class Documents extends _$Documents {
     ref.notifyListeners();
   }
 
-  void addChild(int n, authority.NodeType nt) {
-    state.documents[state.current].addChild(n, nt);
+  void addChild(authority.Ref aref, authority.NodeType nt) {
+    state.documents[state.current].addChild(aref, nt);
     ref.notifyListeners();
   }
 
-  void addSibling(int n, authority.NodeType nt) {
-    state.documents[state.current].addSibling(n, nt);
+  void addSibling(authority.Ref aref, authority.NodeType nt) {
+    state.documents[state.current].addSibling(aref, nt);
     ref.notifyListeners();
   }
 
-  void dropElement(int n) {
-    state.documents[state.current].drop(n);
+  void dropNode(authority.Ref aref) {
+    state.documents[state.current].dropNode(aref);
     ref.notifyListeners();
   }
 
@@ -91,8 +98,23 @@ class Node extends _$Node {
     return documents.documents[documents.current].current();
   }
 
-  void multiAdd(String element, String tok) {
-    state.mAdd(element, tok);
+  void multiAdd(String element, String? sub) {
+    state.multiAdd(element, sub);
+    ref.notifyListeners();
+  }
+
+  void multiDrop(String element, int index) {
+    state.multiDrop(element, index);
+    ref.notifyListeners();
+  }
+
+  void multiUp(String element, int index) {
+    state.multiUp(element, index);
+    ref.notifyListeners();
+  }
+
+  void multiDown(String element, int index) {
+    state.multiDown(element, index);
     ref.notifyListeners();
   }
 }

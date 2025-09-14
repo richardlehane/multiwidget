@@ -43,6 +43,9 @@ dependencies:
     git:
       url: https://github.com/richardlehane/authority
 
+dependency_overrides:
+  math_expressions: ^3.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

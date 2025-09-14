@@ -6,7 +6,7 @@ part of 'multi_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$documentsHash() => r'aae92c84179642c4c02ec0f69c214c85f0aa38e5';
+String _$documentsHash() => r'2c47fd31d37754810aaf3d30e10acf510540fc58';
 
 /// See also [Documents].
 @ProviderFor(Documents)
@@ -20,7 +20,7 @@ final documentsProvider = NotifierProvider<Documents, DocState>.internal(
 );
 
 typedef _$Documents = Notifier<DocState>;
-String _$nodeHash() => r'1f0d0e39264ce9f8cbdee47689b15809d55ac658';
+String _$nodeHash() => r'3ca3201c2b26271048675566deb8443cff84e929';
 
 /// See also [Node].
 @ProviderFor(Node)
